@@ -13,9 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.android.example.cookingrecipes.repository.RecipeApi.RECIPE_BASE_URL;
 
-public class ApiController {
+class ApiController {
 
-    public void loadRecipes(Callback<List<Recipe>> callback) {
+    void loadRecipes(Callback<List<Recipe>> callback) {
         Call<List<Recipe>> call = load().getRecipes();
         call.enqueue(callback);
     }

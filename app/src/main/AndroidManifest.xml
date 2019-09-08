@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:targetSandboxVersion="1"
-    package="com.android.example.cookingrecipes">
+    package="com.android.example.cookingrecipes"
+    android:targetSandboxVersion="1">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -11,13 +11,13 @@
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ui.activities.ItemListActivity"
+            android:name=".ui.activities.RecipeListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.ItemDetailActivity"
+            android:name=".ui.activities.RecipeDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ui.activities.ItemListActivity"
+            android:parentActivityName=".ui.activities.RecipeListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.android.example.cookingrecipes.ui.activities.ItemListActivity" />
+                android:value="com.android.example.cookingrecipes.ui.activities.RecipeListActivity" />
         </activity>
     </application>
 

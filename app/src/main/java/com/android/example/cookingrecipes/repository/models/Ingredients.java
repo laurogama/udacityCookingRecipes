@@ -1,6 +1,6 @@
 package com.android.example.cookingrecipes.repository.models;
 
-class Ingredients {
+public class Ingredients {
     String measure;
     Float quantity;
     String ingredient;

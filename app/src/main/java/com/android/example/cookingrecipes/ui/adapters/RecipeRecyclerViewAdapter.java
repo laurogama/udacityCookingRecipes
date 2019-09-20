@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
 import com.android.example.cookingrecipes.ui.fragments.RecipeDetailFragment;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -45,12 +47,10 @@ public class RecipeRecyclerViewAdapter
     };
     private List<Recipe> mValues;
 
-
     public RecipeRecyclerViewAdapter(RecipeListActivity parent, List<Recipe> recipes, boolean twoPane) {
         mParentActivity = parent;
         mTwoPane = twoPane;
         mValues = recipes;
-
     }
 
     @Override
@@ -62,8 +62,13 @@ public class RecipeRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mContentView.setText(mValues.get(position).getName());
-        //TODO use image of recipe
+        holder.mRecipeName.setText(mValues.get(position).getName());
+        int imageWidthPixels = 50;
+        int imageHeightPixels = 100;
+        Glide.with(mParentActivity)
+                .load(mValues.get(position).getImage()).error(R.drawable.recipe)
+                .override(imageWidthPixels, imageHeightPixels)
+                .into(holder.mRecipePicture);
         holder.itemView.setTag(mValues.get(position).getId());
         holder.itemView.setOnClickListener(mOnClickListener);
     }
@@ -74,13 +79,14 @@ public class RecipeRecyclerViewAdapter
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView mIdView;
-        final TextView mContentView;
+        final TextView mRecipeName;
+        final ImageView mRecipePicture;
 
         ViewHolder(View view) {
             super(view);
-            mIdView = view.findViewById(R.id.id_text);
-            mContentView = view.findViewById(R.id.content);
+            mRecipeName = view.findViewById(R.id.tv_recipe_name);
+            mRecipePicture = view.findViewById(R.id.iv_recipe);
         }
     }
+
 }

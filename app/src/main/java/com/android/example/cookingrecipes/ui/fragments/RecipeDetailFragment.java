@@ -1,6 +1,5 @@
 package com.android.example.cookingrecipes.ui.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +8,14 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.example.cookingrecipes.R;
 import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
+import com.android.example.cookingrecipes.ui.adapters.IngredientsAdapter;
 import com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
  * A fragment representing a single Recipe detail screen.
@@ -32,6 +32,7 @@ public class RecipeDetailFragment extends Fragment {
 
     private Recipe mRecipe;
     private RecipeDetailViewModel mViewModel;
+    private RecyclerView mRecyclerViewIngredients;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,19 +46,9 @@ public class RecipeDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null && getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            //TODO get recipe
-
-            Activity activity = this.getActivity();
             mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
             mRecipe = mViewModel.getRecipe(getArguments().getInt(ARG_ITEM_ID, -1));
-            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
 
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mRecipe.getName());
-            }
         }
     }
 
@@ -66,9 +57,10 @@ public class RecipeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
         if (mRecipe != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mRecipe.getName());
+            ((TextView) rootView.findViewById(R.id.tv_recipe_name)).setText(mRecipe.getName());
+            mRecyclerViewIngredients = rootView.findViewById(R.id.rv_ingredients);
+            mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mRecipe.getIngredients()));
         }
         return rootView;
     }

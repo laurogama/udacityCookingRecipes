@@ -9,10 +9,8 @@ import retrofit2.http.GET;
 
 public interface RecipeApi {
 
-//    String RECIPE_BASE_URL = "http://go.udacity.com/";
-    String RECIPE_BASE_URL = "https://d17h27t6h515a5.cloudfront.net";
+    String RECIPE_BASE_URL = "https://go.udacity.com/";
 
-//    @GET("android-baking-app-json/")
-    @GET("topher/2017/May/59121517_baking/baking.json")
+    @GET("android-baking-app-json/")
     Call<List<Recipe>> getRecipes();
 }

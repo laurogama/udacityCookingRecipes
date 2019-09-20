@@ -6,7 +6,7 @@ import com.android.example.cookingrecipes.repository.Repository;
 import com.android.example.cookingrecipes.repository.models.Recipe;
 
 public class RecipeDetailViewModel extends ViewModel {
-    private Recipe mRecipe;
+    public Recipe mRecipe;
 
     public RecipeDetailViewModel() {
 

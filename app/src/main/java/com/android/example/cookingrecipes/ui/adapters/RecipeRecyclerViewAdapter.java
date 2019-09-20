@@ -16,7 +16,6 @@ import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
 import com.android.example.cookingrecipes.ui.fragments.RecipeDetailFragment;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -47,7 +46,8 @@ public class RecipeRecyclerViewAdapter
     };
     private List<Recipe> mValues;
 
-    public RecipeRecyclerViewAdapter(RecipeListActivity parent, List<Recipe> recipes, boolean twoPane) {
+    public RecipeRecyclerViewAdapter(RecipeListActivity parent, List<Recipe> recipes,
+            boolean twoPane) {
         mParentActivity = parent;
         mTwoPane = twoPane;
         mValues = recipes;
@@ -56,7 +56,7 @@ public class RecipeRecyclerViewAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_content, parent, false);
+                .inflate(R.layout.recipe_list_content, parent, false);
         return new ViewHolder(view);
     }
 
@@ -65,10 +65,9 @@ public class RecipeRecyclerViewAdapter
         holder.mRecipeName.setText(mValues.get(position).getName());
         int imageWidthPixels = 50;
         int imageHeightPixels = 100;
-        Glide.with(mParentActivity)
-                .load(mValues.get(position).getImage()).error(R.drawable.recipe)
-                .override(imageWidthPixels, imageHeightPixels)
-                .into(holder.mRecipePicture);
+//        Picasso.get().load(mValues.get(position).getImage()).resize(imageWidthPixels,
+//                imageHeightPixels).placeholder(R.drawable.recipe).into(holder.mRecipePicture);
+
         holder.itemView.setTag(mValues.get(position).getId());
         holder.itemView.setOnClickListener(mOnClickListener);
     }
@@ -88,5 +87,4 @@ public class RecipeRecyclerViewAdapter
             mRecipePicture = view.findViewById(R.id.iv_recipe);
         }
     }
-
 }

@@ -15,6 +15,7 @@ import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
 import com.android.example.cookingrecipes.ui.adapters.IngredientsAdapter;
+import com.android.example.cookingrecipes.ui.adapters.StepsAdapter;
 import com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel;
 
 /**
@@ -33,6 +34,7 @@ public class RecipeDetailFragment extends Fragment {
     private Recipe mRecipe;
     private RecipeDetailViewModel mViewModel;
     private RecyclerView mRecyclerViewIngredients;
+    private RecyclerView mRecyclerViewSteps;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -55,12 +57,17 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.item_detail, container, false);
+        View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
 
         if (mRecipe != null) {
             ((TextView) rootView.findViewById(R.id.tv_recipe_name)).setText(mRecipe.getName());
             mRecyclerViewIngredients = rootView.findViewById(R.id.rv_ingredients);
             mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mRecipe.getIngredients()));
+
+            mRecyclerViewSteps = rootView.findViewById(R.id.rv_steps);
+            mRecyclerViewSteps.setAdapter(new StepsAdapter(mRecipe.getSteps()));
+
+
         }
         return rootView;
     }

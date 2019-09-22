@@ -8,9 +8,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.example.cookingrecipes.R;
+import com.android.example.cookingrecipes.databinding.RecipeDetailBinding;
 import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
@@ -33,10 +34,13 @@ public class RecipeDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "recipe_detail_frag";
 
+    public RecyclerView mRecyclerViewIngredients;
+
+    public RecyclerView mRecyclerViewSteps;
+
+    public TextView mServings;
     private Recipe mRecipe;
     private RecipeDetailViewModel mViewModel;
-    private RecyclerView mRecyclerViewIngredients;
-    private RecyclerView mRecyclerViewSteps;
     private boolean mTwoPane;
 
     /**
@@ -60,18 +64,21 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
 
-        if (mRecipe != null) {
-            ((TextView) rootView.findViewById(R.id.tv_recipe_name)).setText(mRecipe.getName());
-            mRecyclerViewIngredients = rootView.findViewById(R.id.rv_ingredients);
-            mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mRecipe.getIngredients()));
+        RecipeDetailBinding binding = RecipeDetailBinding.inflate(inflater, container, false);
+        binding.setViewmodel(mViewModel);
+        View rootView = binding.getRoot();
 
-            mRecyclerViewSteps = rootView.findViewById(R.id.rv_steps);
-            mRecyclerViewSteps.setAdapter(new StepsAdapter(mRecipe.getSteps(), mTwoPane));
+        mRecyclerViewIngredients = binding.rvIngredients;
+        mRecyclerViewIngredients.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mRecyclerViewIngredients.setHasFixedSize(true);
+        mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mRecipe.getIngredients()));
 
+        mRecyclerViewSteps = binding.rvSteps;
+        mRecyclerViewSteps.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mRecyclerViewSteps.setHasFixedSize(true);
+        mRecyclerViewSteps.setAdapter(new StepsAdapter(mRecipe.getSteps(), mTwoPane));
 
-        }
         return rootView;
     }
 }

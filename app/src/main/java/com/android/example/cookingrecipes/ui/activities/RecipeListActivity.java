@@ -57,7 +57,6 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     private void onRecipesChanged(List<Recipe> recipes) {
-//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager());
         setupRecyclerView(recyclerView, recipes);
     }
 

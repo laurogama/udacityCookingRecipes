@@ -10,6 +10,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
+    android:background="@color/color_background"
     tools:context=".ui.activities.RecipeListActivity">
 
     <!--

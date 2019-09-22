@@ -12,7 +12,7 @@ public class Recipe {
     @ColumnInfo
     private
     String name;
-    private List<Ingredients> ingredients;
+    private List<Ingredient> ingredients;
     private List<Steps> steps;
     private Integer servings;
     private String image;
@@ -20,7 +20,7 @@ public class Recipe {
     private Integer id;
 
     public Recipe(Integer id, String name,
-                  List<Ingredients> ingredients,
+                  List<Ingredient> ingredients,
                   List<Steps> steps, Integer servings,
                   String image) {
         this.id = id;
@@ -63,11 +63,11 @@ public class Recipe {
         this.steps = steps;
     }
 
-    public List<Ingredients> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredients> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 

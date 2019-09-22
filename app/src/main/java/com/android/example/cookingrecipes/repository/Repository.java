@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.example.cookingrecipes.repository.models.Recipe;
+import com.android.example.cookingrecipes.repository.models.Step;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import retrofit2.Response;
 public class Repository {
     private static Repository sInstance;
     private MutableLiveData<List<Recipe>> mRecipes;
+    private Step mStep;
     private ApiController mApiController;
 
     private Repository() {
@@ -52,5 +54,13 @@ public class Repository {
             return mRecipes.getValue().stream().parallel().filter(rec -> rec.getId().equals(id)).findFirst().orElse(null);
         }
         return null;
+    }
+
+    public Step getSelectedStep() {
+        return mStep;
+    }
+
+    public void setSelectedStep(Step step) {
+        mStep = step;
     }
 }

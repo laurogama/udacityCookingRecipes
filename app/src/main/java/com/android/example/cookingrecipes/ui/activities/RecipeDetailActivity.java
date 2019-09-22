@@ -9,35 +9,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.example.cookingrecipes.R;
 import com.android.example.cookingrecipes.ui.fragments.RecipeDetailFragment;
 
-/**
- * An activity representing a single Item detail screen. This
- * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link RecipeListActivity}.
- */
 public class RecipeDetailActivity extends AppCompatActivity {
     RecipeDetailFragment fragment;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail);
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
+        setContentView(R.layout.activity_recipe_info);
+
+        if (findViewById(R.id.recipe_info_container) != null) {
+            // The detail container view will be present only in the
+            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the
+            // activity should be in two-pane mode.
+            mTwoPane = true;
+        }
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putInt(RecipeDetailFragment.ARG_ITEM_ID,
                     getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1));
-            arguments.putBoolean(RecipeListActivity.TWO_PANE, false);
             fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
         } else {
@@ -45,7 +38,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     .getFragment(savedInstanceState, RecipeDetailFragment.ARG_ITEM_ID);
         }
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.item_detail_container, fragment)
+                .add(R.id.recipe_info_container, fragment)
                 .commit();
     }
 
@@ -58,4 +51,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    private void showStep(int position) {
+//        if (mTwoPane) {
+//            Bundle arguments = new Bundle();
+//            arguments.putParcelable(StepDetailFragment.STEP_KEY, mRecipe.getSteps().get(position));
+//            RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.recipe_step_detail_container, fragment)
+//                    .commit();
+//        } else {
+//            Intent intent = new Intent(this, RecipeStepDetailActivity.class);
+//            intent.putExtra(RecipeStepDetailActivity.RECIPE_KEY, mRecipe);
+//            intent.putExtra(RecipeStepDetailActivity.STEP_SELECTED_KEY, position);
+//            startActivity(intent);
+//        }
+//    }
 }

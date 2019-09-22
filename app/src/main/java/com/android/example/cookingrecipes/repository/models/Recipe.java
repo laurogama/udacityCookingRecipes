@@ -13,7 +13,7 @@ public class Recipe {
     private
     String name;
     private List<Ingredient> ingredients;
-    private List<Steps> steps;
+    private List<Step> steps;
     private Integer servings;
     private String image;
     @PrimaryKey
@@ -21,7 +21,7 @@ public class Recipe {
 
     public Recipe(Integer id, String name,
                   List<Ingredient> ingredients,
-                  List<Steps> steps, Integer servings,
+                  List<Step> steps, Integer servings,
                   String image) {
         this.id = id;
         this.name = name;
@@ -55,11 +55,11 @@ public class Recipe {
         this.servings = servings;
     }
 
-    public List<Steps> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<Steps> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 

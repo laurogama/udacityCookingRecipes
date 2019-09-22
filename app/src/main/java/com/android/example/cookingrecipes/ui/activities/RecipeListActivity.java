@@ -1,11 +1,12 @@
 package com.android.example.cookingrecipes.ui.activities;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.example.cookingrecipes.R;
@@ -30,7 +31,6 @@ public class RecipeListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
     private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView recyclerView;
 
@@ -39,18 +39,6 @@ public class RecipeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
-
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
         recyclerView = findViewById(R.id.item_list);
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
         mRecipeListViewModel.getRecipes().observe(this, this::onRecipesChanged);
@@ -60,7 +48,18 @@ public class RecipeListActivity extends AppCompatActivity {
         setupRecyclerView(recyclerView, recipes);
     }
 
+    public int calculateNoOfColumns() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scalingFactor = 200;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+        if (noOfColumns < 2)
+            noOfColumns = 2;
+        return noOfColumns;
+    }
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Recipe> recipes) {
-        recyclerView.setAdapter(new RecipeRecyclerViewAdapter(this, recipes, mTwoPane));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, calculateNoOfColumns()));
+        recyclerView.setAdapter(new RecipeRecyclerViewAdapter(recipes));
     }
 }

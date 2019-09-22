@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="step"
+            type="com.android.example.cookingrecipes.repository.models.Step" />
+
+        <variable
+            name="viewModel"
+            type="com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_margin"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_margin"
+                android:text="@{step.shortDescription}" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</layout>

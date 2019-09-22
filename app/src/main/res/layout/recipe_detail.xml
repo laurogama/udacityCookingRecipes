@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_background"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
@@ -15,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/card_margin"
-            android:layout_marginTop="70dp"
             android:layout_marginRight="@dimen/card_margin"
             android:layout_marginBottom="@dimen/card_margin"
             app:cardBackgroundColor="?attr/colorPrimaryDark"
@@ -37,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="16dp"
-                    android:text="@{viewmodel.mRecipe.name}"
+                    android:text="@{recipe.name}"
                     android:textIsSelectable="true"
                     tools:context=".ui.fragments.RecipeDetailFragment" />
 
@@ -45,9 +43,7 @@
                     android:id="@+id/tv_servings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{`Serves `+ viewmodel.mRecipe.servings+` people`}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_recipe_name" />
+                    android:text="@{`Serves `+ recipe.servings+` people`}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_ingredients"
@@ -56,29 +52,15 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-
-        <TextView
-            android:id="@+id/tv_steps_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/steps"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_ingredients">
-
-        </TextView>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_steps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-
     <data>
-
         <variable
-            name="viewmodel"
-            type="com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel" />
+            name="recipe"
+            type="com.android.example.cookingrecipes.repository.models.Recipe" />
     </data>
 
 </layout>

@@ -16,6 +16,7 @@ import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
 import com.android.example.cookingrecipes.ui.fragments.RecipeDetailFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class RecipeRecyclerViewAdapter
     private List<Recipe> mValues;
 
     public RecipeRecyclerViewAdapter(RecipeListActivity parent, List<Recipe> recipes,
-            boolean twoPane) {
+                                     boolean twoPane) {
         mParentActivity = parent;
         mTwoPane = twoPane;
         mValues = recipes;
@@ -65,9 +66,10 @@ public class RecipeRecyclerViewAdapter
         holder.mRecipeName.setText(mValues.get(position).getName());
         int imageWidthPixels = 50;
         int imageHeightPixels = 100;
-//        Picasso.get().load(mValues.get(position).getImage()).resize(imageWidthPixels,
-//                imageHeightPixels).placeholder(R.drawable.recipe).into(holder.mRecipePicture);
-
+        if (!mValues.get(position).getImage().equals("")) {
+            Picasso.get().load(mValues.get(position).getImage()).resize(imageWidthPixels,
+                    imageHeightPixels).error(R.drawable.recipe).placeholder(R.drawable.recipe).into(holder.mRecipePicture);
+        }
         holder.itemView.setTag(mValues.get(position).getId());
         holder.itemView.setOnClickListener(mOnClickListener);
     }

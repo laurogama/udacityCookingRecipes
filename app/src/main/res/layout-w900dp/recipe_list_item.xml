@@ -29,6 +29,12 @@
         tools:context="com.android.example.cookingrecipes.ui.activities.RecipeListActivity"
         tools:listitem="@layout/recipe_list_content" />
 
+    <!-- A small divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray" />
+
     <FrameLayout
         android:id="@+id/item_detail_container"
         android:layout_width="0dp"

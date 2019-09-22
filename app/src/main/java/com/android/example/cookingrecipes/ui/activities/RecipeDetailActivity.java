@@ -16,6 +16,7 @@ import com.android.example.cookingrecipes.ui.fragments.RecipeDetailFragment;
  * in a {@link RecipeListActivity}.
  */
 public class RecipeDetailActivity extends AppCompatActivity {
+    RecipeDetailFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +37,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putInt(RecipeDetailFragment.ARG_ITEM_ID,
                     getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1));
-            RecipeDetailFragment fragment = new RecipeDetailFragment();
+            arguments.putBoolean(RecipeListActivity.TWO_PANE, false);
+            fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
-                    .commit();
+        } else {
+            fragment = (RecipeDetailFragment) getSupportFragmentManager()
+                    .getFragment(savedInstanceState, RecipeDetailFragment.ARG_ITEM_ID);
         }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.item_detail_container, fragment)
+                .commit();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             navigateUpTo(new Intent(this, RecipeListActivity.class));
             return true;
         }

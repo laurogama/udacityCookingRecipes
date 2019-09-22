@@ -10,7 +10,10 @@ import com.android.example.cookingrecipes.repository.models.Ingredients;
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter {
+    private List<Ingredients> mIngredients;
+
     public IngredientsAdapter(List<Ingredients> ingredients) {
+        mIngredients = ingredients;
     }
 
     @NonNull

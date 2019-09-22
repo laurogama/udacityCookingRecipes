@@ -4,4 +4,6 @@
     <string name="recipe_picture">Recipe picture</string>
     <string name="steps">Steps</string>
     <string name="step">Step</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

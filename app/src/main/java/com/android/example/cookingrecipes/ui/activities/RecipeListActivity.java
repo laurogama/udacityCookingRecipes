@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class RecipeListActivity extends AppCompatActivity {
 
+    public static final String TWO_PANE = "two_pane";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -56,6 +57,7 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     private void onRecipesChanged(List<Recipe> recipes) {
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager());
         setupRecyclerView(recyclerView, recipes);
     }
 

@@ -13,14 +13,12 @@ import com.android.example.cookingrecipes.ui.listeners.StepClickListener;
 import java.util.List;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
-    private final boolean mTwoPane;
 
     private StepClickListener mClickListener;
     private List<Step> mSteps;
 
-    public StepsAdapter(List<Step> steps, boolean twoPane, StepClickListener clickListener) {
+    public StepsAdapter(List<Step> steps, StepClickListener clickListener) {
         mSteps = steps;
-        mTwoPane = twoPane;
         mClickListener = clickListener;
     }
 

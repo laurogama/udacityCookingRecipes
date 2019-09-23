@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.example.cookingrecipes.R;
 import com.android.example.cookingrecipes.databinding.RecipeDetailBinding;
-import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.repository.models.Step;
 import com.android.example.cookingrecipes.ui.activities.RecipeDetailActivity;
 import com.android.example.cookingrecipes.ui.activities.RecipeListActivity;
@@ -33,10 +32,7 @@ public class RecipeDetailFragment extends Fragment implements StepClickListener 
      * represents.
      */
     public static final String ARG_ITEM_ID = "recipe_detail_frag";
-
-    private Recipe mRecipe;
     private RecipeDetailViewModel mViewModel;
-    private boolean mTwoPane;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -46,32 +42,23 @@ public class RecipeDetailFragment extends Fragment implements StepClickListener 
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null && getArguments().containsKey(ARG_ITEM_ID)) {
-            mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
-            mRecipe = mViewModel.getRecipe(getArguments().getInt(ARG_ITEM_ID, -1));
-            mTwoPane = getActivity().findViewById(R.id.step_detail_container) != null;
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         RecipeDetailBinding binding = RecipeDetailBinding.inflate(inflater, container, false);
-        binding.setRecipe(mRecipe);
+        mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
+        binding.setRecipe(mViewModel.getRecipe());
         View rootView = binding.getRoot();
 
         RecyclerView mRecyclerViewIngredients = binding.rvIngredients;
         mRecyclerViewIngredients.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mRecyclerViewIngredients.setHasFixedSize(true);
-        mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mRecipe.getIngredients()));
+        mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mViewModel.getRecipe().getIngredients()));
 
         RecyclerView mRecyclerViewSteps = binding.rvSteps;
         mRecyclerViewSteps.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mRecyclerViewSteps.setHasFixedSize(true);
-        mRecyclerViewSteps.setAdapter(new StepsAdapter(mRecipe.getSteps(), mTwoPane, this));
+        mRecyclerViewSteps.setAdapter(new StepsAdapter(mViewModel.getRecipe().getSteps(), this));
 
         return rootView;
     }
@@ -80,7 +67,7 @@ public class RecipeDetailFragment extends Fragment implements StepClickListener 
     public void OnItemClick(Step step) {
         mViewModel.onStepClicked(step);
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
-        if (mTwoPane) {
+        if (mViewModel.isTwopane()) {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.step_detail_container, stepDetailFragment).commit();
         } else {

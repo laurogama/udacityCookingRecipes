@@ -8,6 +8,10 @@
         <variable
             name="step"
             type="com.android.example.cookingrecipes.repository.models.Step" />
+
+        <variable
+            name="viewModel"
+            type="com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +19,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/playerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -43,11 +47,13 @@
             app:layout_constraintTop_toBottomOf="@+id/horizontalHalf"
             tools:text="@tools:sample/lorem/random" />
 
+
         <ImageView
             android:id="@+id/previous_step"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/previous_step"
+            android:onClick="@{()->viewModel.previousStep(step.id)}"
             android:src="@drawable/ic_navigate_before_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -57,10 +63,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/next_step"
+            android:onClick="@{()->viewModel.nextStep(step.id)}"
             android:src="@drawable/ic_navigate_next_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

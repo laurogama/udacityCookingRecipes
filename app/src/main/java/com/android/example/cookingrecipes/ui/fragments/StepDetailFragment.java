@@ -1,5 +1,6 @@
 package com.android.example.cookingrecipes.ui.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,13 @@ import androidx.lifecycle.ViewModelProviders;
 import com.android.example.cookingrecipes.databinding.StepDetailBinding;
 import com.android.example.cookingrecipes.repository.models.Step;
 import com.android.example.cookingrecipes.ui.viewmodel.StepDetailViewModel;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 public class StepDetailFragment extends Fragment {
 
@@ -21,6 +29,7 @@ public class StepDetailFragment extends Fragment {
     private StepDetailViewModel mViewModel;
     private StepDetailBinding binding;
     private Step mStep;
+    private SimpleExoPlayer mExoPlayer;
 
     public StepDetailFragment() {
     }
@@ -30,6 +39,44 @@ public class StepDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(StepDetailViewModel.class);
         Log.d(StepDetailFragment.class.getSimpleName(), "onCreate");
+
+    }
+
+    /**
+     * Initialize ExoPlayer.
+     *
+     * @param mediaUri The URI of the sample to play.
+     */
+    private void initializePlayer(Uri mediaUri) {
+        if (mExoPlayer == null) {
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this.getContext());
+            // Create an instance of the ExoPlayer.
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this.getContext(),
+                    Util.getUserAgent(this.getContext(), this.getActivity().getApplication().getPackageName()));
+            // This is the MediaSource representing the media to be played.
+            MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaUri);
+            // Prepare the player with the source.
+            mExoPlayer.prepare(videoSource);
+        }
+    }
+
+    /**
+     * Release ExoPlayer.
+     */
+    private void releasePlayer() {
+        mExoPlayer.stop();
+        mExoPlayer.release();
+        mExoPlayer = null;
+    }
+
+    /**
+     * Release the player when the activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
     }
 
     private void onStepChanged(Step step) {
@@ -42,11 +89,10 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d(StepDetailFragment.class.getSimpleName(), "onCreateView");
         binding = StepDetailBinding.inflate(inflater, container, false);
-        Log.d(StepDetailFragment.class.getSimpleName(), String.format("Step:%s", mViewModel.getStep().getDescription()));
         binding.setStep(mViewModel.getStep());
-        Log.d(StepDetailFragment.class.getSimpleName(), String.format("Activity:%s", getActivity().getClass().getSimpleName()));
+        initializePlayer(Uri.parse(mViewModel.getStep().getVideoURL()));
+        binding.playerView.setPlayer(mExoPlayer);
         return binding.getRoot();
     }
 }

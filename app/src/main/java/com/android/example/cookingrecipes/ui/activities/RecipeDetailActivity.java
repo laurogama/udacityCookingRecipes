@@ -20,21 +20,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_info);
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
-        mViewModel.setRecipe(getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1));
+        int recipeId = getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1);
+        mViewModel.setRecipe(recipeId);
         mViewModel.setTwoPane(findViewById(R.id.step_detail_container) != null);
-        if (savedInstanceState == null) {
-            Bundle arguments = new Bundle();
-            arguments.putInt(RecipeDetailFragment.ARG_ITEM_ID,
-                    getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1));
-            fragment = new RecipeDetailFragment();
-            fragment.setArguments(arguments);
-        } else {
-            fragment = (RecipeDetailFragment) getSupportFragmentManager()
-                    .getFragment(savedInstanceState, RecipeDetailFragment.ARG_ITEM_ID);
-        }
+
+        Bundle arguments = new Bundle();
+        arguments.putInt(RecipeDetailFragment.ARG_ITEM_ID, recipeId);
+        fragment = new RecipeDetailFragment();
+        fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.recipe_info_container, fragment)
                 .commit();
+
     }
 
     @Override

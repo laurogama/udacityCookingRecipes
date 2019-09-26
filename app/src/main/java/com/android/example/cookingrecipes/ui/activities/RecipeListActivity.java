@@ -26,12 +26,6 @@ import java.util.List;
  */
 public class RecipeListActivity extends AppCompatActivity {
 
-    public static final String TWO_PANE = "two_pane";
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView recyclerView;
 
 
@@ -40,7 +34,11 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         recyclerView = findViewById(R.id.item_list);
-        mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        /**
+         * Whether or not the activity is in two-pane mode, i.e. running on a tablet
+         * device.
+         */
+        RecipeListViewModel mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
         mRecipeListViewModel.getRecipes().observe(this, this::onRecipesChanged);
     }
 

@@ -29,5 +29,14 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/recipe_list_item" />
+
+        <TextView
+            android:id="@+id/tv_retrofit_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/a_error_happened_retrieving_recipes"
+            android:textColor="@color/colorOnPrimary"
+            android:visibility="gone" />
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

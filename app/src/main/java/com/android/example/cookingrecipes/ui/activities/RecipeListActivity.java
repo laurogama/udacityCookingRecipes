@@ -2,6 +2,8 @@ package com.android.example.cookingrecipes.ui.activities;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,9 @@ import com.android.example.cookingrecipes.ui.viewmodel.RecipeListViewModel;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * An activity representing a list of Items. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -26,14 +31,16 @@ import java.util.List;
  */
 public class RecipeListActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-
+    @BindView(R.id.item_list)
+    public RecyclerView recyclerView;
+    @BindView(R.id.tv_retrofit_error)
+    public TextView textViewRetrofitError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-        recyclerView = findViewById(R.id.item_list);
+        ButterKnife.bind(this);
         /**
          * Whether or not the activity is in two-pane mode, i.e. running on a tablet
          * device.
@@ -43,7 +50,19 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     private void onRecipesChanged(List<Recipe> recipes) {
-        setupRecyclerView(recyclerView, recipes);
+        if (recipes.isEmpty()) {
+            showRetrofitError(true);
+        } else {
+            setupRecyclerView(recyclerView, recipes);
+        }
+    }
+
+    private void showRetrofitError(boolean isError) {
+        if (isError) {
+            textViewRetrofitError.setVisibility(View.VISIBLE);
+        } else {
+            textViewRetrofitError.setVisibility(View.GONE);
+        }
     }
 
     public int calculateNoOfColumns() {
@@ -57,6 +76,7 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Recipe> recipes) {
+        showRetrofitError(false);
         recyclerView.setLayoutManager(new GridLayoutManager(this, calculateNoOfColumns()));
         recyclerView.setAdapter(new RecipeRecyclerViewAdapter(recipes));
     }

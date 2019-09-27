@@ -10,4 +10,5 @@
     <string name="ingredient_format">%s x %s of %s</string>
     <string name="next_step">next step</string>
     <string name="previous_step">previous step</string>
+    <string name="a_error_happened_retrieving_recipes">A error happened retrieving recipes</string>
 </resources>

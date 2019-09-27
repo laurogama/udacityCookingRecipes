@@ -44,10 +44,10 @@ public class StepDetailFragment extends Fragment {
 
     /**
      * Initialize ExoPlayer.
-     *
-     * @param mediaUri The URI of the sample to play.
      */
-    private void initializePlayer(Uri mediaUri) {
+    private void initializePlayer(Step step) {
+        Uri mediaUri = Uri.parse(step.getVideoURL());
+
         if (mExoPlayer == null) {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(this.getContext());
             // Create an instance of the ExoPlayer.
@@ -91,7 +91,7 @@ public class StepDetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = StepDetailBinding.inflate(inflater, container, false);
         binding.setStep(mViewModel.getStep());
-        initializePlayer(Uri.parse(mViewModel.getStep().getVideoURL()));
+        initializePlayer(mViewModel.getStep());
         binding.playerView.setPlayer(mExoPlayer);
         return binding.getRoot();
     }

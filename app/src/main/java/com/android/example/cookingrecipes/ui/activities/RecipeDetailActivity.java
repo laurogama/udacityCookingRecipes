@@ -21,7 +21,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_info);
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         int recipeId = getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1);
+        mViewModel.getRecipe().getValue();
         mViewModel.setRecipe(recipeId);
+
         mViewModel.setTwoPane(findViewById(R.id.step_detail_container) != null);
 
         Bundle arguments = new Bundle();

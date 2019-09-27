@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.android.example.cookingrecipes.databinding.StepDetailBinding;
 import com.android.example.cookingrecipes.repository.models.Step;
-import com.android.example.cookingrecipes.ui.viewmodel.StepDetailViewModel;
+import com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -26,9 +26,7 @@ import com.google.android.exoplayer2.util.Util;
 public class StepDetailFragment extends Fragment {
 
     public static final String STEP_KEY = "step_id";
-    private StepDetailViewModel mViewModel;
     private StepDetailBinding binding;
-    private Step mStep;
     private SimpleExoPlayer mExoPlayer;
 
     public StepDetailFragment() {
@@ -37,7 +35,6 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(StepDetailViewModel.class);
         Log.d(StepDetailFragment.class.getSimpleName(), "onCreate");
 
     }
@@ -65,9 +62,11 @@ public class StepDetailFragment extends Fragment {
      * Release ExoPlayer.
      */
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     /**
@@ -81,8 +80,10 @@ public class StepDetailFragment extends Fragment {
 
     private void onStepChanged(Step step) {
         Log.d(StepDetailFragment.class.getSimpleName(), "onStepChanged");
-        mStep = step;
-        binding.setStep(mStep);
+        binding.setStep(step);
+        releasePlayer();
+        initializePlayer(step);
+        binding.playerView.setPlayer(mExoPlayer);
     }
 
     @Nullable
@@ -90,9 +91,12 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = StepDetailBinding.inflate(inflater, container, false);
-        binding.setStep(mViewModel.getStep());
-        initializePlayer(mViewModel.getStep());
-        binding.playerView.setPlayer(mExoPlayer);
+        RecipeDetailViewModel mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        mViewModel.getStep().observe(this, this::onStepChanged);
+        binding.setViewModel(mViewModel);
+
+        binding.nextStep.setOnClickListener(v -> mViewModel.nextStep());
+        binding.previousStep.setOnClickListener(v -> mViewModel.previousStep());
         return binding.getRoot();
     }
 }

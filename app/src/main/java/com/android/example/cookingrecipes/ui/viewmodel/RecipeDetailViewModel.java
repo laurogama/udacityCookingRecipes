@@ -2,6 +2,7 @@ package com.android.example.cookingrecipes.ui.viewmodel;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.example.cookingrecipes.repository.Repository;
@@ -10,27 +11,30 @@ import com.android.example.cookingrecipes.repository.models.Step;
 
 public class RecipeDetailViewModel extends ViewModel {
     private static final String TAG = RecipeDetailViewModel.class.getSimpleName();
-    private Recipe mRecipe;
     private boolean mTwoPane;
+    private int stepId;
 
 
     public RecipeDetailViewModel() {
     }
 
-    public Recipe getRecipe() {
-        return mRecipe;
+    public LiveData<Recipe> getRecipe() {
+        return Repository.getsInstance().getRecipe();
     }
 
     public void setRecipe(Integer id) {
-        mRecipe = Repository.getsInstance().getRecipe(id);
+        Repository.getsInstance().setRecipe(id);
+        stepId = 0;
     }
 
     public void onStepClicked(Step step) {
-        Log.d(RecipeDetailViewModel.class.getSimpleName(), String.format("Step %d clicked", step.getId()));
+        Log.d(RecipeDetailViewModel.class.getSimpleName(), String.format("Step %d clicked",
+                step.getId()));
+        stepId = step.getId();
         Repository.getsInstance().setSelectedStep(step);
     }
 
-    public Step getStep() {
+    public LiveData<Step> getStep() {
         return Repository.getsInstance().getSelectedStep();
     }
 
@@ -42,11 +46,29 @@ public class RecipeDetailViewModel extends ViewModel {
         mTwoPane = isTwoPane;
     }
 
-    public void nextStep(int id) {
-        Log.d(TAG, "nextStep: " + id);
+    public void nextStep() {
+        Log.d(TAG, "nextStep:");
+        int newStepId = stepId + 1;
+        if (getRecipe().getValue() != null) {
+            for (Step nextStep : getRecipe().getValue().getSteps()) {
+                if (nextStep.getId().equals(newStepId)) {
+                    stepId = newStepId;
+                    Repository.getsInstance().setSelectedStep(nextStep);
+                }
+            }
+        }
     }
 
-    public void previousStep(int id) {
-        Log.d(TAG, "previousStep: " + id);
+    public void previousStep() {
+        Log.d(TAG, "previousStep:");
+        int newStepId = stepId - 1;
+        if (getRecipe().getValue() != null) {
+            for (Step nextStep : getRecipe().getValue().getSteps()) {
+                if (nextStep.getId().equals(newStepId)) {
+                    stepId = newStepId;
+                    Repository.getsInstance().setSelectedStep(nextStep);
+                }
+            }
+        }
     }
 }

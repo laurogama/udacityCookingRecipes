@@ -47,7 +47,7 @@ public class RecipeDetailFragment extends Fragment implements StepClickListener 
 
         RecipeDetailBinding binding = RecipeDetailBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
-        binding.setRecipe(mViewModel.getRecipe());
+        binding.setRecipe(mViewModel.getRecipe().getValue());
         View rootView = binding.getRoot();
 
         RecyclerView mRecyclerViewIngredients = binding.rvIngredients;

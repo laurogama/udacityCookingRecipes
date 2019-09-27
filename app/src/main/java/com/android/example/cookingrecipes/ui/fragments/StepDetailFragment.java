@@ -95,8 +95,10 @@ public class StepDetailFragment extends Fragment {
         mViewModel.getStep().observe(this, this::onStepChanged);
         binding.setViewModel(mViewModel);
 
-        binding.nextStep.setOnClickListener(v -> mViewModel.nextStep());
-        binding.previousStep.setOnClickListener(v -> mViewModel.previousStep());
+        if (binding.nextStep != null) {
+            binding.nextStep.setOnClickListener(v -> mViewModel.nextStep());
+            binding.previousStep.setOnClickListener(v -> mViewModel.previousStep());
+        }
         return binding.getRoot();
     }
 }

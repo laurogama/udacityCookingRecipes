@@ -46,6 +46,10 @@
                 android:value="com.android.example.cookingrecipes.ui.activities.RecipeListActivity" />
         </activity>
         <activity android:name=".ui.activities.StepDetailActivity" />
+
+        <service
+            android:name=".service.IngredientsWidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

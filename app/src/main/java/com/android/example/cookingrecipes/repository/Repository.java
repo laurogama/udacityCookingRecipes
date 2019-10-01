@@ -2,6 +2,7 @@ package com.android.example.cookingrecipes.repository;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.example.cookingrecipes.repository.models.Recipe;
@@ -16,12 +17,14 @@ import retrofit2.Response;
 public class Repository {
     private static Repository sInstance;
     private MutableLiveData<List<Recipe>> mRecipes;
-    private Step mStep;
+    private MutableLiveData<Step> mStep;
     private ApiController mApiController;
+    private MutableLiveData<Recipe> mCurrentRecipe = new MutableLiveData<>();
 
     private Repository() {
         mApiController = new ApiController();
         mRecipes = new MutableLiveData<>();
+        mStep = new MutableLiveData<>();
     }
 
     public static Repository getsInstance() {
@@ -49,18 +52,29 @@ public class Repository {
         return mRecipes;
     }
 
-    public Recipe getRecipe(Integer id) {
+    private Recipe findRecipe(Integer id) {
         if (mRecipes.getValue() != null) {
-            return mRecipes.getValue().stream().parallel().filter(rec -> rec.getId().equals(id)).findFirst().orElse(null);
+            return mRecipes.getValue().stream().parallel()
+                    .filter(rec -> rec.getId().equals(id))
+                    .findFirst().orElse(null);
         }
         return null;
     }
 
-    public Step getSelectedStep() {
+    public MutableLiveData<Step> getSelectedStep() {
         return mStep;
     }
 
     public void setSelectedStep(Step step) {
-        mStep = step;
+        mStep.postValue(step);
     }
+
+    public LiveData<Recipe> getRecipe() {
+        return mCurrentRecipe;
+    }
+
+    public void setRecipe(Integer id) {
+        mCurrentRecipe.setValue(findRecipe(id));
+    }
+
 }

@@ -53,7 +53,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/previous_step"
-            android:onClick="@{()->viewModel.previousStep(step.id)}"
             android:src="@drawable/ic_navigate_before_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -63,7 +62,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/next_step"
-            android:onClick="@{()->viewModel.nextStep(step.id)}"
             android:src="@drawable/ic_navigate_next_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

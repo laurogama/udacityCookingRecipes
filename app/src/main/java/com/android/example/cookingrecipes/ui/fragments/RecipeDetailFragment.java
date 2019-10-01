@@ -47,19 +47,22 @@ public class RecipeDetailFragment extends Fragment implements StepClickListener 
 
         RecipeDetailBinding binding = RecipeDetailBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
-        binding.setRecipe(mViewModel.getRecipe());
+        binding.setRecipe(mViewModel.getRecipe().getValue());
         View rootView = binding.getRoot();
 
         RecyclerView mRecyclerViewIngredients = binding.rvIngredients;
         mRecyclerViewIngredients.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mRecyclerViewIngredients.setHasFixedSize(true);
-        mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(mViewModel.getRecipe().getIngredients()));
-
+        if (binding.getRecipe() != null) {
+            mRecyclerViewIngredients.setAdapter(new IngredientsAdapter(binding.getRecipe().getIngredients()));
+        }
         RecyclerView mRecyclerViewSteps = binding.rvSteps;
+
         mRecyclerViewSteps.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mRecyclerViewSteps.setHasFixedSize(true);
-        mRecyclerViewSteps.setAdapter(new StepsAdapter(mViewModel.getRecipe().getSteps(), this));
-
+        if (binding.getRecipe() != null) {
+            mRecyclerViewSteps.setAdapter(new StepsAdapter(binding.getRecipe().getSteps(), this));
+        }
         return rootView;
     }
 

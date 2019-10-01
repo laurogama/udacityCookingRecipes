@@ -1,5 +1,8 @@
 package com.android.example.cookingrecipes.ui.activities;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.example.cookingrecipes.R;
+import com.android.example.cookingrecipes.provider.CookingAppWidget;
+import com.android.example.cookingrecipes.repository.models.Recipe;
 import com.android.example.cookingrecipes.ui.fragments.RecipeDetailFragment;
 import com.android.example.cookingrecipes.ui.viewmodel.RecipeDetailViewModel;
 
@@ -21,7 +26,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_info);
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         int recipeId = getIntent().getIntExtra(RecipeDetailFragment.ARG_ITEM_ID, -1);
-        mViewModel.getRecipe().getValue();
+        mViewModel.getRecipe().observe(this, this::onRecipeSelected);
         mViewModel.setRecipe(recipeId);
 
         mViewModel.setTwoPane(findViewById(R.id.step_detail_container) != null);
@@ -34,6 +39,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 .add(R.id.recipe_info_container, fragment)
                 .commit();
 
+    }
+
+    private void onRecipeSelected(Recipe recipe) {
+        Context context = getApplicationContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisWidget = new ComponentName(context, CookingAppWidget.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        Intent intent = new Intent(this, CookingAppWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.rv_widget_ingredients);
+        sendBroadcast(intent);
     }
 
     @Override

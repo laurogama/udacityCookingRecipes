@@ -1,27 +1,25 @@
 package com.android.example.cookingrecipes.provider;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Binder;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.android.example.cookingrecipes.R;
+import com.android.example.cookingrecipes.repository.Repository;
 import com.android.example.cookingrecipes.repository.models.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 public class IngredientsListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context mContext;
-    private ArrayList<Ingredient> listIngredients = new ArrayList<>();
-    private int appWidgetId;
+    private ArrayList<Ingredient> mListIngredients = new ArrayList<>();
 
-    public IngredientsListWidgetRemoteViewsFactory(Context mContext, Intent intent) {
+    public IngredientsListWidgetRemoteViewsFactory(Context mContext) {
         this.mContext = mContext;
-        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
 
@@ -33,43 +31,39 @@ public class IngredientsListWidgetRemoteViewsFactory implements RemoteViewsServi
 
     @Override
     public void onDataSetChanged() {
+        final long identityToken = Binder.clearCallingIdentity();
+        mListIngredients = (ArrayList<Ingredient>) Objects.requireNonNull(Repository.getsInstance()
+                .getRecipe().getValue()).getIngredients();
+        Binder.restoreCallingIdentity(identityToken);
 
-//        final long identityToken = Binder.clearCallingIdentity();
-//        Uri uri = Contract.PATH_TODOS_URI;
-//        mCursor = mContext.getContentResolver().query(uri,
-//                null,
-//                null,
-//                null,
-//                Contract._ID + " DESC");
-
-//        Binder.restoreCallingIdentity(identityToken);
     }
 
     @Override
     public void onDestroy() {
-        listIngredients = new ArrayList<>();
+        mListIngredients = null;
     }
 
     @Override
     public int getCount() {
-        return listIngredients.size();
+        return mListIngredients != null ? mListIngredients.size() : 0;
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
         if (position == AdapterView.INVALID_POSITION ||
-                listIngredients.isEmpty()) {
+                mListIngredients.isEmpty()) {
             return null;
         }
         try {
-            Ingredient ingredient = listIngredients.get(position);
+            Ingredient ingredient = mListIngredients.get(position);
             RemoteViews rv = new RemoteViews(mContext.getPackageName(),
-                    R.layout.ingredient_list_item);
-            rv.setTextViewText(R.id.tv_ingredient_name,
+                    R.layout.widget_ingredient_list_item);
+            rv.setTextViewText(R.id.tv_widget_item,
                     String.format(Locale.ENGLISH, "%.2fx%s %s", ingredient.getQuantity(),
                             ingredient.getMeasure(), ingredient.getIngredientName()));
             return rv;
         } catch (IndexOutOfBoundsException ex) {
+            ex.printStackTrace();
             return null;
         }
 

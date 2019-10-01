@@ -8,6 +8,6 @@ import com.android.example.cookingrecipes.provider.IngredientsListWidgetRemoteVi
 public class IngredientsWidgetRemoteViewsService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new IngredientsListWidgetRemoteViewsFactory(this.getApplicationContext(), intent);
+        return new IngredientsListWidgetRemoteViewsFactory(this.getApplicationContext());
     }
 }
